@@ -3,10 +3,11 @@ The function takes (const void *addr, size_t size), and displays the memory as i
 
 The function prototype:
 
-void	print_memory(const void *addr, size_t size);
+	void	print_memory(const void *addr, size_t size);
 
 Example:
-$> cat main.c
+
+	$> cat main.c
 
 	void	print_memory(const void *addr, size_t size);
 
@@ -20,7 +21,8 @@ $> cat main.c
 	}
 
 $> gcc -Wall -Wall -Werror main.c print_memory.c && ./a.out | cat -e
-0000 0000 1700 0000 9600 0000 ff00 0000 ................$
-0c00 0000 1000 0000 2a00 0000 6700 0000 ........*...g...$
-0000 0000 0000 0000                     ........$
+
+	0000 0000 1700 0000 9600 0000 ff00 0000 ................$
+	0c00 0000 1000 0000 2a00 0000 6700 0000 ........*...g...$
+	0000 0000 0000 0000                     ........$
 
