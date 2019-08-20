@@ -12,58 +12,47 @@
 
 #include <unistd.h>
 
-static void	ft_putstrn(char *s)
+static void	set_line(char *s)
 {
-	while (s[0])
-	{
-		write(1, s, 1);
-		s++;
-	}
-	write(1, "\n", 1);
-}
-
-static void	setstr(char *s)
-{
-	int		i;
+	int	i;
 
 	i = 0;
 	while (i < 40)
 	{
-		s[i] = ' ';
+		if (i == 0 || (i + 1) % 5 != 0)
+			s[i] = '0';
+		else
+			s[i] = ' ';
 		i++;
 	}
-	s[40] = 0;
-}
-
-static int	ft_setdot(char *s, unsigned char *c, int i)
-{
-	if (c[i] > 31 && c[i] < 127)
-		s[40 + i % 16] = c[i];
-	else
-		s[40 + i % 16] = '.';
-	s[40 + (i) % 16 + 1] = 0;
-	return (0);
+	while (i < 56)
+	{
+		s[i] = '.';
+		i++;
+	}
+	s[56] = '\n';
 }
 
 void		print_memory(const void *addr, size_t size)
 {
-	char	s[57];
-	char	*oct;
-	int		i;
+	char		ret[57];
+	unsigned char	*v;
+	char		*hex;
+	unsigned	i;
 
-	i = -1;
-	oct = "0123456789abcdef";
-	while (++i < (int)size)
+	v = (unsigned char*)addr;
+	hex = "0123456789abcdef";
+	i = 0;
+	set_line(ret);
+	while (i < 16 && i < size)
 	{
-		if (i % 16 == 0)
-		{
-			if (i / 16 > 0)
-				ft_putstrn(s);
-			setstr(s);
-		}
-		s[i % 16 * 2 + (i % 16 / 2)] = oct[((unsigned char*)addr)[i] / 16];
-		s[i % 16 * 2 + 1 + (i % 16 / 2)] = oct[((unsigned char*)addr)[i] % 16];
-		ft_setdot(s, (unsigned char*)addr, i);
+		ret[i * 2 + i / 2] = hex[v[i] / 16];
+		ret[i * 2 + i / 2 + 1] = hex[v[i] % 16];
+		if (v[i] > 31 && v[i] < 127)
+			ret[40 + i] = v[i];
+		i++;
 	}
-	ft_putstrn(s);
+	write(1, ret, 57);
+	if (size > 16)
+		print_memory(&(addr[16]), size - 16);
 }
